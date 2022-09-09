@@ -1,8 +1,6 @@
 from contextlib import suppress
 from typing import Any, Dict, List, Type
-
 from sqlalchemy.exc import IntegrityError
-
 from project.config import config
 from project.models import Genre, Director, Movie
 from project.server import create_app
@@ -22,7 +20,6 @@ if __name__ == '__main__':
     app = create_app(config)
 
     with app.app_context():
-        # TODO: [fixtures] Добавить модели Directors и Movies
         load_data(fixtures['genres'], Genre)
         load_data(fixtures['directors'], Director)
         load_data(fixtures['movies'], Movie)

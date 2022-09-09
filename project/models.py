@@ -1,8 +1,5 @@
-from enum import unique
-
 from sqlalchemy import Column, String, Float, ForeignKey, Integer
 from sqlalchemy.orm import relationship
-
 from project.setup.db import models
 
 

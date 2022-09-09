@@ -20,8 +20,8 @@ movie: Model = api.model('Фильмы', {
     'trailer': fields.String(required=True, max_length=100),
     'year': fields.String(required=True, max_length=100),
     'rating': fields.Float(required=True, max_length=100),
-    'genre_id': fields.Nested(genre),
-    'director_id': fields.Nested(director)
+    'genre': fields.Nested(genre),
+    'director': fields.Nested(director)
 })
 
 user: Model = api.model('Пользователи', {
