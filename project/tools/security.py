@@ -61,7 +61,6 @@ def compose_passwords(password_hash: Union[str, bytes], password: str):
 
 def get_data_by_token(refresh_token):
     data = jwt.decode(refresh_token, key=current_app.config["SECRET_KEY"], algorithms=current_app.config["ALGORITHM"])
-
     return data
 
 

@@ -2,7 +2,7 @@ from typing import Optional
 from project.dao import UsersDAO
 from project.exceptions import ItemNotFound
 from project.models import User
-from project.tools.security import generate_token, update_token
+from project.tools.security import generate_token, update_token, get_data_by_token, generate_password_hash
 
 
 class UsersService:
@@ -18,7 +18,7 @@ class UsersService:
         return self.dao.get_all(page=page)
 
     def create_user(self, email, password):
-        return self.dao.create_user(email=email, password=password)
+        return self.dao.create_user(email=email, password=generate_password_hash(password))
 
     def get_user_by_email(self, email) -> User:
         return self.dao.get_user_by_email(email=email)
@@ -27,7 +27,27 @@ class UsersService:
         user = self.get_user_by_email(email)
         return generate_token(email=email, password=password, password_hash=user.password)
 
-    def update_toke(self, access_token, refresh_token):
+    def update_token(self, access_token, refresh_token):
         return update_token(refresh_token)
 
+    def get_user_by_token(self, token):
+        data = get_data_by_token(token)
+        if data:
+            return self.get_user_by_email(data.get("email"))
 
+    def update_user(self, data, token):
+        user = get_data_by_token(token)
+        if user:
+            self.dao.update_user(data=data, email=user.get('email'))
+            return self.get_user_by_email(user.get('email'))
+
+    def update_password(self, data, token):
+        user = get_data_by_token(token)
+        if user:
+            self.dao.update_user(
+                data={
+                    "password": generate_password_hash(data.get('password_2'))
+                },
+                email=user.get('email')
+            )
+            return self.get_user_by_email(user.get('email'))

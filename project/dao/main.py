@@ -1,12 +1,9 @@
 from typing import Optional, List
-
 from flask_sqlalchemy import BaseQuery
 from sqlalchemy import desc
 from werkzeug.exceptions import NotFound
-
 from project.dao.base import BaseDAO, T
 from project.models import Genre, Movie, Director, User
-from project.tools.security import generate_password_hash
 
 
 class GenresDAO(BaseDAO[Genre]):
@@ -34,13 +31,17 @@ class DirectorsDAO(BaseDAO[Director]):
     __model__ = Director
 
 
+class Exceptions:
+    pass
+
+
 class UsersDAO(BaseDAO[User]):
     __model__ = User
 
     def create_user(self, email: str, password: str):
         user = User(
             email=email,
-            password=generate_password_hash(password)
+            password=password
         )
         try:
             self._db_session.add(user)
@@ -53,5 +54,12 @@ class UsersDAO(BaseDAO[User]):
     def get_user_by_email(self, email):
         return self._db_session.query(self.__model__).filter(self.__model__.email == email).one()
 
-
-
+    def update_user(self, data, email):
+        try:
+            self._db_session.query(self.__model__).filter(self.__model__.email == email).update(data)
+            self._db_session.commit()
+            print("User has been updated")
+        except Exceptions as e:
+            print("Something went wrong")
+            print(e)
+            self._db_session.rollback()
