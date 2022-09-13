@@ -34,7 +34,6 @@ class SigninView(Resource):
         """
         data = request.json
         token = request.headers["Authorization"].split("Bearer ")[-1]
-
         return user_service.update_password(data=data, token=token)
 
 

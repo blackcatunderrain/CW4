@@ -1,6 +1,5 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-
 from project.exceptions import BaseServiceError
 from project.setup.api import api
 from project.setup.db import db

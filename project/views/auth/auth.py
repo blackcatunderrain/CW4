@@ -3,7 +3,6 @@ from flask_restx import Namespace, Resource
 from project.container import user_service
 from project.setup.api.models import user
 
-
 api = Namespace('auth')
 
 
@@ -23,7 +22,7 @@ class SignupView(Resource):
 
 @api.route('/login/')
 class SigninView(Resource):
-    # @api.marshal_with(user, code=200, description='OK')
+
     def post(self):
         """
         Sign in user.
@@ -34,7 +33,6 @@ class SigninView(Resource):
         else:
             return "Something went wrong.", 401
 
-    # @api.marshal_with(user, code=200, description='OK')
     def put(self):
         """
         Update user token.
