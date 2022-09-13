@@ -47,15 +47,21 @@ def generate_token(email, password, password_hash, refresh=False):
 
 
 def update_token(refresh_token):
-    data = jwt.dencode(refresh_token, key=current_app.config["SECRET_KEY"], algorithms=current_app.config["ALGORITHM"])
+    data = jwt.decode(refresh_token, key=current_app.config["SECRET_KEY"], algorithms=current_app.config["ALGORITHM"])
 
     email = data.get("email")
     password = data.get("password")
 
-    return generate_token(email=email, password=password, password_has=None, refresh=True)
+    return generate_token(email=email, password=password, password_hash=None, refresh=True)
 
 
 def compose_passwords(password_hash: Union[str, bytes], password: str):
     return password_hash == generate_password_hash(password)
+
+
+def get_data_by_token(refresh_token):
+    data = jwt.decode(refresh_token, key=current_app.config["SECRET_KEY"], algorithms=current_app.config["ALGORITHM"])
+
+    return data
 
 
